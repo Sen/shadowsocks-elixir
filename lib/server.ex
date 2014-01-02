@@ -46,9 +46,7 @@ defmodule Server do
       { :ok, data } ->
         request_sender_pid <- { :send, data }
         do_server(socket, request_sender_pid)
-      { :error, :closed } ->
-        request_sender_pid <- { :close }
-        :ok
+      { :error, :closed } -> :ok
     end
   end
 
@@ -57,8 +55,6 @@ defmodule Server do
       { :send, data } ->
         :ok = :gen_tcp.send(socket, data)
         do_request_sender(socket)
-      { :close } ->
-        :ok = :gen_tcp.close(socket)
     end
   end
 
@@ -68,10 +64,7 @@ defmodule Server do
         :ok = :gen_tcp.send(socket, data)
         do_request(request_socket, socket)
 
-      { :error, :closed } ->
-        :ok = :gen_tcp.close(request_socket)
-        :ok = :gen_tcp.close(socket)
-        :ok
+      { :error, :closed } -> :ok
     end
   end
 
