@@ -1,5 +1,5 @@
 shadowsocks-elixir
 ==================
 
-encrypt/decrypt data
-config file
+* encrypt/decrypt data
+* config file
