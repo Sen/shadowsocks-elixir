@@ -1,4 +1,5 @@
-Shadowsocks-Elixir
+shadowsocks-elixir
 ==================
 
-** TODO: Add description **
+encrypt/decrypt data
+config file
