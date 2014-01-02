@@ -1,0 +1,2 @@
+defmodule ShadowsocksElixir do
+end
