@@ -1,6 +1,6 @@
 defmodule Server do
   def listen(port) do
-    tcp_options = [:binary, {:packet, 0}, {:active, :once}, {:reuseaddr, true}]
+    tcp_options = [:binary, {:packet, 0}, {:active, :once}, {:reuseaddr, true}, {:backlog, 128}]
     {:ok, l_socket} = :gen_tcp.listen(port, tcp_options)
     do_listen(l_socket)
   end
@@ -36,7 +36,7 @@ defmodule Server do
         request_sender_pid = spawn_link(fn() -> do_request_sender(request_socket) end)
 
         if String.length(to_send) > 0 do
-          request_sender_pid <- { :send, to_send }
+          send(request_sender_pid, { :send, to_send })
         end
 
         do_server(socket, request_sender_pid)
@@ -48,7 +48,7 @@ defmodule Server do
     :inet.setopts(socket, [{:active, :once}])
     receive do
       {:tcp, socket, data} ->
-        request_sender_pid <- { :send, data }
+        send(request_sender_pid, { :send, data })
         do_server(socket, request_sender_pid)
       {:tcp_closed, socket} -> :ok
     end
